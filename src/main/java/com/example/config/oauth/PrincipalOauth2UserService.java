@@ -69,9 +69,9 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService{
         String username = provider + "_" + providerId;
         String email = oAuth2UserInfo.getEmail();
 
-        SocialUser userEntity = socialUserRepository.findByMembername(username);
+        SocialUser userEntity = socialUserRepository.findByEmail(username);
 
-        //동일한 이메일을 가진 Member가 있는지 확인
+        //동일한 이메일을 가진 Member가 있는지 확인`
         if(userEntity == null){
 
             Optional<Member> exinstingMember = memberRepository.findByEmail(email);

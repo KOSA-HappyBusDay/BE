@@ -3,10 +3,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,13 +16,14 @@ public class SocialUser {
     private long id;
 
     private String membername;
-
     private String password;
     private String email;
     private String address;
-
     private String provider;
     private String providerId;
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ImageData> images = new ArrayList<>();
 
     @Builder
     public SocialUser(String membername, String password, String email, String address, String provider, String providerId) {
