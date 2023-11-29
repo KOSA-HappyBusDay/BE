@@ -53,17 +53,25 @@ public class StorageService {
         return null;
     }
 
+<<<<<<< HEAD
     public String uploadVideo(MultipartFile file,String Authorization) throws IOException {
         Optional<Member> memberInformation = memberRepository.findByEmail(jwtTokenToPayload(Authorization));
 
         Member memberId = memberInformation.get();
         Member memberToId = new Member(memberId.getId());
+=======
+    public String uploadVideo(MultipartFile file) throws IOException {
+
+>>>>>>> 351cf12c9eb57c1b1a7fb01db3fd6b1de2e39ed6
         MediaData mediaData = mediaRepository.save(
                 MediaData.builder()
                         .name(file.getOriginalFilename())
                         .type(file.getContentType())
                         .mediaData(MediaUtils.compressMedia(file.getBytes())) // 명시적인 제네릭 타입 지정
+<<<<<<< HEAD
                         .member(memberId)
+=======
+>>>>>>> 351cf12c9eb57c1b1a7fb01db3fd6b1de2e39ed6
                         .build());
         if (mediaData != null) {
             return "동영상 파일이 성공적으로 업로드되었습니다: " + file.getOriginalFilename();

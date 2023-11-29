@@ -31,9 +31,15 @@ public class StorageController {
     // 영상 업로드
     @PostMapping("/upload/video")
     @PreAuthorize("hasRole('USER')")
+<<<<<<< HEAD
     public ResponseEntity<?> uploadVideo(@RequestHeader("Authorization") String Authorization, @RequestParam("video") MultipartFile file) throws IOException {
         // 여기에 영상 업로드를 처리하는 코드 추가
         String uploadVideo = storageService.uploadVideo(file, Authorization);
+=======
+    public ResponseEntity<?> uploadVideo(@RequestParam("video") MultipartFile file) throws IOException {
+        // 여기에 영상 업로드를 처리하는 코드 추가
+        String uploadVideo = storageService.uploadVideo(file);
+>>>>>>> 351cf12c9eb57c1b1a7fb01db3fd6b1de2e39ed6
         return ResponseEntity.status(HttpStatus.OK)
                 .body(uploadVideo);
     }
