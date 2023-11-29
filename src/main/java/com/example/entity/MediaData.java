@@ -25,7 +25,6 @@ public class MediaData {
     @Column(nullable = false)
     private String type;
 
-<<<<<<< HEAD
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
@@ -42,12 +41,5 @@ public class MediaData {
         this.type = type;
         this.member = member;
         this.socialUser = socialUser;
-=======
-    @Builder
-    public MediaData(String name, byte[] mediaData, String type) {
-        this.name = name;
-        this.mediaData = mediaData;
-        this.type = type;
->>>>>>> 351cf12c9eb57c1b1a7fb01db3fd6b1de2e39ed6
     }
 }
