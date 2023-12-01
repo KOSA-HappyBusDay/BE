@@ -28,6 +28,8 @@ public class Authority {
     @JsonIgnore
     private Member member;
 
+
+
     public SimpleGrantedAuthority toGrantedAuthority() {
         return new SimpleGrantedAuthority("ROLE_" + this.name);
     }

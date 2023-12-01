@@ -53,7 +53,7 @@ public class StorageService {
         return null;
     }
 
-    public String uploadVideo(MultipartFile file,String Authorization) throws IOException {
+    public String uploadVideo(MultipartFile file,String Authorization,String videoDuration) throws IOException {
         Optional<Member> memberInformation = memberRepository.findByEmail(jwtTokenToPayload(Authorization));
 
         Member memberId = memberInformation.get();
@@ -63,6 +63,7 @@ public class StorageService {
                         .name(file.getOriginalFilename())
                         .type(file.getContentType())
                         .mediaData(MediaUtils.compressMedia(file.getBytes())) // 명시적인 제네릭 타입 지정
+                        .videoDuration(videoDuration) // videoDuration 추가
                         .member(memberId)
                         .build());
         if (mediaData != null) {
