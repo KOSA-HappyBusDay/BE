@@ -33,13 +33,16 @@ public class MediaData {
     @JoinColumn(name="socialuser_id")
     private SocialUser socialUser;
 
+    private String videoDuration; // videoDuration 추가
+
 
     @Builder
-    public MediaData(String name, byte[] mediaData, String type, Member member, SocialUser socialUser) {
+    public MediaData(String name, byte[] mediaData, String type, Member member, SocialUser socialUser,String videoDuration) {
         this.name = name;
         this.mediaData = mediaData;
         this.type = type;
         this.member = member;
         this.socialUser = socialUser;
+        this.videoDuration = videoDuration;
     }
 }
