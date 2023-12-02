@@ -17,6 +17,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -27,75 +28,44 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeRequests()
-//                .antMatchers("/public/**").permitAll()
-//                .anyRequest().authenticated()
-//                .and()
-//                .formLogin()
-//                .loginPage("/login")
-//                .permitAll()
-//                .and()
-//                .logout()
-//                .permitAll();
-//    }
 
     private final JwtProvider jwtProvider;
 
+    @Autowired
+    public SecurityConfig(JwtProvider jwtProvider) {
+        this.jwtProvider = jwtProvider;
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+        configuration.setAllowedMethods(List.of("*"));
+        configuration.setAllowedHeaders(List.of("*"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // ID, Password 문자열을 Base64로 인코딩하여 전달하는 구조
                 .httpBasic().disable()
-                // 쿠키 기반이 아닌 JWT 기반이므로 사용하지 않음
                 .csrf().disable()
-                // CORS 설정
-                .cors(c -> {
-                    CorsConfigurationSource source = request -> {
-                        CorsConfiguration config = new CorsConfiguration();
-                        // 클라이언트 도메인을 명시적으로 추가
-                        config.setAllowedOrigins(
-                                List.of("http://localhost:5173")
-                        );
-                        config.setAllowedMethods(
-                                List.of("*")
-                        );
-                        config.setAllowedHeaders(
-                                List.of("*")
-                        );
-                        return config;
-                    };
-                    c.configurationSource(source);
-                })
-                // Spring Security 세션 정책 : 세션을 생성 및 사용하지 않음
+                .cors().configurationSource(corsConfigurationSource())
+                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .logout()
-                .logoutUrl("/logout")           // 로그아웃 URL 설정
-                .invalidateHttpSession(true)    // 세션 무효화
-                .clearAuthentication(true)      // 인증 정보 삭제
-                .logoutSuccessUrl("/")          // 로그아웃 성공 시 리다이렉트할 URL
                 .and()
-                .oauth2Login()
-                .and()
-
-                // 조건별로 요청 허용/제한 설정
                 .authorizeRequests()
-                // 회원가입과 로그인은 모두 승인
                 .antMatchers("/register", "/login/**", "/", "/logout", "/image/**").permitAll()
-                // /admin으로 시작하는 요청은 ADMIN 권한이 있는 유저에게만 허용
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/image/upload").hasAnyRole("USER")
-                // 이미지 업로드를 로그인 하고 해야지 할 수 있게..!
-                .antMatchers().authenticated()
-                .anyRequest().denyAll()
+                .anyRequest().authenticated()  // 이 부분을 추가
                 .and()
-                // JWT 인증 필터 적용
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
-                // 에러 핸들링
                 .exceptionHandling()
                 .accessDeniedHandler(new AccessDeniedHandler() {
                     @Override
@@ -119,11 +89,6 @@ public class SecurityConfig {
                 });
 
         return http.build();
-    }
-
-    @Autowired
-    public SecurityConfig(JwtProvider jwtProvider) {
-        this.jwtProvider = jwtProvider;
     }
 
     @Bean
