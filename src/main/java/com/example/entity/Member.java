@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -15,49 +16,59 @@ import java.util.List;
 @NoArgsConstructor
 public class Member {
     @Id
-    @Column(name="member_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable=false, length=50)
-    private String memberName;
+    @Column(nullable=false, length=45)
+    private String nickname;
 
-    @Column(nullable=false, length=100, unique=true)
+    @Column(length=45)
+    private String name;
+
+    @Column(length=45)
+    private String gender;
+
+    @Column(length=45)
+    private String skintype;
+
+    @Column
+    private Date birthday;
+
+    @Column(length=45)
     private String email;
 
-    @Column(nullable=false, length=200)
+    @Column(length=45)
+    private String username;
+
+    @Column(length=45)
     private String password;
 
-//    @Column(nullable=false, length=50)
-//    private String name;
+    @Column(length=45)
+    private String passwordtest;
 
-    // 명시적으로 getAddress와 setAddress 추가
-    @Getter
-    @Column(length=100)
-    private String address;
-
-//    @Column(length=200)
-//    private String medical_certification;
-
-    // 명시적으로 getAuthorities와 setAuthorities 추가
-    @Getter
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<Authority> authorities = new ArrayList<>();
 
-    public Member(Long id) {
-        this.id = id;
-    }
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<FacePicture> facePictures = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
-    private List<ImageData> images = new ArrayList<>();
+    private List<ChatMessage> chatmessages = new ArrayList<>();
+
+    // 다른 필드 및 메서드들은 생략하였습니다.
 
     public void setAuthorities(List<Authority> authorities) {
         this.authorities = authorities;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setFacepPctures(List<FacePicture> facepPctures) {
+        this.facePictures = facepPctures;
+    }
+
+    public void setChatmessages(List<ChatMessage> chatmessages) {
+        this.chatmessages = chatmessages;
     }
 }

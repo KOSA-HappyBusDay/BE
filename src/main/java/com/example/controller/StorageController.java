@@ -1,6 +1,5 @@
 package com.example.controller;
 
-
 import com.example.service.StorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,70 +13,37 @@ import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/image")
+@RequestMapping("/storage")
 public class StorageController {
-    final private StorageService storageService;
+    private final StorageService storageService;
 
-
-    // 업로드
-    @PostMapping("/upload")@PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> uploadImage(@RequestHeader("Authorization") String Authorization, @RequestParam("image") MultipartFile file) throws IOException {
-        String uploadImage = storageService.uploadImage(file,Authorization);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(uploadImage);
-    }
-
-
-
-
-    // 영상 업로드
-    @PostMapping("/upload/video")
+    @PostMapping("/upload/image")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> uploadVideo(@RequestHeader("Authorization") String Authorization, @RequestParam("video") MultipartFile videoFile, @RequestParam("videoDuration") String videoDuration) throws IOException {
-        // 여기에 영상 업로드를 처리하는 코드 추가
-        String uploadVideo = storageService.uploadVideo(videoFile, Authorization, videoDuration);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(uploadVideo);
+    public ResponseEntity<?> uploadImage(
+            @RequestHeader("Authorization") String authorization,
+            @RequestParam("image") MultipartFile file,
+            @RequestParam("forehead") Integer forehead,
+            @RequestParam("leftCheek") Integer leftCheek,
+            @RequestParam("rightCheek") Integer rightCheek,
+            @RequestParam("chin") Integer chin
+    ) throws IOException {
+        String uploadImage = storageService.uploadImage(file, authorization, forehead, leftCheek, rightCheek, chin);
+        return ResponseEntity.status(HttpStatus.OK).body(uploadImage);
     }
 
-//    // 영상 업로드
-//    @PostMapping("/video")
+    // 영상 업로드 부분은 주석 처리합니다.
+//    @PostMapping("/upload/video")
 //    @PreAuthorize("hasRole('USER')")
-//    public ResponseEntity<?> uploadVideo(@RequestHeader("Authorization") String Authorization, @RequestParam("video") MultipartFile videoFile, @RequestParam("videoDuration") String videoDuration) throws IOException {
-//        // 여기에 영상 업로드를 처리하는 코드 추가
-//        String uploadVideo = storageService.uploadVideo(videoFile, Authorization, videoDuration);
-//        return ResponseEntity.status(HttpStatus.OK)
-//                .body(uploadVideo);
+//    public ResponseEntity<?> uploadVideo(@RequestHeader("Authorization") String authorization, @RequestParam("video") MultipartFile videoFile, @RequestParam("videoDuration") String videoDuration) throws IOException {
+//        String uploadVideo = storageService.uploadVideo(videoFile, authorization, videoDuration);
+//        return ResponseEntity.status(HttpStatus.OK).body(uploadVideo);
 //    }
 
-
-    // 다운로드
-    @GetMapping("/{fileName}")
+    @GetMapping("/download/image/{fileName}")
     public ResponseEntity<?> downloadImage(@PathVariable("fileName") String fileName) {
         byte[] downloadImage = storageService.downloadImage(fileName);
         return ResponseEntity.status(HttpStatus.OK)
-                .contentType(MediaType.valueOf("image/png"))
+                .contentType(MediaType.IMAGE_JPEG) // 이미지의 형식에 맞게 설정
                 .body(downloadImage);
-    }
-
-    // 추가 GET 엔드포인트를 사용한 다운로드
-    @GetMapping("/download/{fileName}")
-    public ResponseEntity<?> downloadImageAlternate(@PathVariable("fileName") String fileName) {
-        byte[] downloadImage = storageService.downloadImage(fileName);
-        return ResponseEntity.status(HttpStatus.OK)
-                .contentType(MediaType.valueOf("image/png"))
-                .body(downloadImage);
-    }
-
-    @GetMapping("/download/video/{fileName}")
-    public ResponseEntity<?> downloadVideo(@PathVariable("fileName") String fileName) {
-        // 여기에 영상 다운로드를 처리하는 코드 추가
-        byte[] downloadVideo = storageService.downloadVideo(fileName);
-        return ResponseEntity.status(HttpStatus.OK)
-                .contentType(MediaType.valueOf("video/mp4")) // 예시로 mp4 형식을 사용했습니다. 실제로 사용하는 형식에 맞게 변경해야 합니다.
-                .body(downloadVideo);
     }
 }
-
-
-

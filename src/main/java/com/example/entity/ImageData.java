@@ -40,42 +40,32 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "ImageData")
+@Table(name = "Image_Data")
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ImageData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-
     private String type;
 
     @Lob
-    @Column(name = "imagedata", length = 1000)
-    private byte[] imageData;
+    private byte[] image_data;
+
+    private String name;
 
     @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "FacepPctures_id")
+    private FacePicture facePicture;
 
-    @ManyToOne
-    @JoinColumn(name="socialuser_id")
-    private SocialUser socialUser;
-
-    @Column
-    private String plate;
+    private String result_class;
 
     @Builder
-    public ImageData(Long id, String name, String type, byte[] imageData, Member member, SocialUser socialUser, String plate) {
-        this.id = id;
+    public ImageData(String name, String type, byte[] imageData, FacePicture facePicture) {
         this.name = name;
         this.type = type;
-        this.imageData = imageData;
-        this.member = member;
-        this.socialUser = socialUser;
-        this.plate = plate;
+        this.image_data = imageData;
+        this.facePicture = facePicture;
     }
 }
