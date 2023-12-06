@@ -40,10 +40,10 @@ public class Member {
     @Column(length=45)
     private String username;
 
-    @Column(length=45)
+    @Column(length=245)
     private String password;
 
-    @Column(length=45)
+    @Column(length=245)
     private String passwordtest;
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

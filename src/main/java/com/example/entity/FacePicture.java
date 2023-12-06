@@ -2,6 +2,7 @@ package com.example.entity;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -11,31 +12,39 @@ import java.util.List;
 @Table
 @Getter
 @Setter
-public class FacePicture{
+@NoArgsConstructor // 기본 생성자 추가
+public class FacePicture {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer forehead;
-    private Integer left_cheek;
-    private Integer right_cheek;
-    private Integer chin;
+    @Column(columnDefinition = "LONGBLOB")
+    @Lob
+    private byte[] forehead;
+
+    @Column(columnDefinition = "LONGBLOB")
+    @Lob
+    private byte[] left_cheek;
+
+    @Column(columnDefinition = "LONGBLOB")
+    @Lob
+    private byte[] right_cheek;
+
+    @Column(columnDefinition = "LONGBLOB")
+    @Lob
+    private byte[] chin;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "facePicture", cascade = CascadeType.ALL)
-    private List<ImageData> imageDataList;
-
     @Builder
-    public FacePicture(Integer forehead, Integer left_cheek, Integer right_cheek, Integer chin, Member member, List<ImageData> imageDataList) {
+    public FacePicture(byte[] forehead, byte[] left_cheek, byte[] right_cheek, byte[] chin, Member member) {
         this.forehead = forehead;
         this.left_cheek = left_cheek;
         this.right_cheek = right_cheek;
         this.chin = chin;
         this.member = member;
-        this.imageDataList = imageDataList;
     }
 }
 

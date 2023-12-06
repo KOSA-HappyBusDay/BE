@@ -197,11 +197,35 @@ public class SignInService {
     }
 
     public boolean register(SignInRequestDto request) throws Exception {
+//        try {
+//            Member member = Member.builder()
+//                    .password(passwordEncoder.encode(request.getPassword()))
+//                    .nickname(request.getNickname())
+//                    .email(request.getEmail())
+//                    .build();
+//
+//            // Set authorities directly to the member entity
+//            member.setAuthorities(Collections.singletonList(Authority.builder().name(DEFAULT_ROLE_USER).member(member).build()));
+//
+//            memberRepository.save(member);
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//            throw new Exception("잘못된 요청입니다.");
+//        }
+//        return true;
+//    }
         try {
+            String hashedPassword = passwordEncoder.encode(request.getPassword());
+
             Member member = Member.builder()
-                    .password(passwordEncoder.encode(request.getPassword()))
-                    .nickname(request.getNickname())
+                    .birthday(request.getBirthday())
                     .email(request.getEmail())
+                    .gender(request.getGender())
+                    .name(request.getName())
+                    .skintype(request.getSkintype())
+                    .password(hashedPassword)
+                    .nickname(request.getNickname())
+                    .username(request.getUsername())
                     .build();
 
             // Set authorities directly to the member entity
@@ -214,6 +238,7 @@ public class SignInService {
         }
         return true;
     }
+
     public SignInResponseDto getMember(String email) throws Exception {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new Exception("계정을 찾을 수 없습니다."));

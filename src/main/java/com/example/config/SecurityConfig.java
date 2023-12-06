@@ -61,7 +61,7 @@ public class SecurityConfig {
                 .logout()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/register", "/login/**", "/", "/logout", "/image/**").permitAll()
+                .antMatchers("/register", "/login/**", "/", "/logout", "/image/**","/auth/**","/face-picture/**").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/image/upload").hasAnyRole("USER")
                 .anyRequest().authenticated()  // 이 부분을 추가
