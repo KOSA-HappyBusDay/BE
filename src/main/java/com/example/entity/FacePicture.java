@@ -38,6 +38,8 @@ public class FacePicture {
     @JoinColumn(name = "member_id")
     private Member member;
 
+
+
     @Builder
     public FacePicture(byte[] forehead, byte[] left_cheek, byte[] right_cheek, byte[] chin, Member member) {
         this.forehead = forehead;

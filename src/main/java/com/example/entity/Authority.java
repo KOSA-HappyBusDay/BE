@@ -28,6 +28,10 @@ public class Authority {
     @JsonIgnore
     private Member member;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "clinic_member_id")
+    @JsonIgnore
+    private ClinicMember clinic_member;
 
 
     public SimpleGrantedAuthority toGrantedAuthority() {

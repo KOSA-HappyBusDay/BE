@@ -1,4 +1,4 @@
-//package com.example.config.auth;
+package com.example.config.auth;//package com.example.config.auth;
 //
 //import com.example.entity.SocialUser;
 //import lombok.Data;

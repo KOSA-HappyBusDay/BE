@@ -38,6 +38,7 @@ package com.example.userdetails;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -45,10 +46,17 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
+    private final List<String> excludeUrlPatterns = new ArrayList<>();
+    private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
+    public void setExcludeUrlPatterns(List<String> patterns) {
+        this.excludeUrlPatterns.addAll(patterns);
+    }
     public JwtAuthenticationFilter(JwtProvider jwtProvider) {
         this.jwtProvider = jwtProvider;
     }
@@ -57,8 +65,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             // 토큰 추출
-            String token = jwtProvider.resolveToken(request);
 
+            String path = request.getRequestURI();
+            if (excludeUrlPatterns.stream().anyMatch(pattern -> pathMatcher.match(pattern, path))) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+            String token = jwtProvider.resolveToken(request);
             if (token != null && jwtProvider.validateToken(token)) {
                 // "Bearer " 부분 제거
                 token = token.replace("Bearer ", "").trim();
