@@ -1,8 +1,9 @@
 HELP.md
-target/
 !.mvn/wrapper/maven-wrapper.jar
+target
 !**/src/main/**/target/
 !**/src/test/**/target/
+src/main/resources
 
 
 ### STS ###
@@ -10,12 +11,14 @@ target/
 .classpath
 .factorypath
 .project
+
 .settings
 .springBeans
 .sts4-cache
 .docker-compose.yml
 docker-compose.yml
 Dockerfile
+
 ### IntelliJ IDEA ###
 .idea
 *.iws
