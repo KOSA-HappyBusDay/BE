@@ -13,7 +13,7 @@ services:
   spring-crud-example:
     build:
       context: ..
-      dockerfile: Dockerfile
+      dockerfile: BE/Dockerfile
     container_name: container_app
     links:
       - mysql
