@@ -30,6 +30,8 @@ public class QMessage extends EntityPathBase<Message> {
 
     public final BooleanPath isRead = createBoolean("isRead");
 
+    public final NumberPath<Long> senderId = createNumber("senderId", Long.class);
+
     public final DateTimePath<java.util.Date> timestamp = createDateTime("timestamp", java.util.Date.class);
 
     public QMessage(String variable) {

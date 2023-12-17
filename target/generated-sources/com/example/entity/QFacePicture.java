@@ -22,6 +22,8 @@ public class QFacePicture extends EntityPathBase<FacePicture> {
 
     public static final QFacePicture facePicture = new QFacePicture("facePicture");
 
+    public final StringPath AImessage = createString("AImessage");
+
     public final ArrayPath<byte[], Byte> chin = createArray("chin", byte[].class);
 
     public final ArrayPath<byte[], Byte> forehead = createArray("forehead", byte[].class);
@@ -29,6 +31,8 @@ public class QFacePicture extends EntityPathBase<FacePicture> {
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final ArrayPath<byte[], Byte> left_cheek = createArray("left_cheek", byte[].class);
+
+    public final DatePath<java.time.LocalDate> localDate = createDate("localDate", java.time.LocalDate.class);
 
     public final QMember member;
 
